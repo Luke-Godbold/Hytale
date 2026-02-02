@@ -54,7 +54,7 @@ function SignIn() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: "light",
+          theme: "dark",
           transition: Bounce,
 
           });}
@@ -67,7 +67,7 @@ function SignIn() {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: "light",
+          theme: "dark",
           transition: Bounce,
 
           });

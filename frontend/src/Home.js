@@ -4,7 +4,7 @@ import Nav from './NavBar';
 
 function Home() {
   return (
-    <div className="App">
+    <div className="w-full">
         <div className=''>
 
         </div>
