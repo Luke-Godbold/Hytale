@@ -5,3 +5,29 @@ CREATE TABLE Users (
     passw TEXT NOT NULL
 );
 
+CREATE TABLE Guides (
+    g_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    g_name TEXT NOT NULL,
+    overview TEXT NOT NULL,
+    img TEXT NOT NULL
+);
+
+CREATE TABLE Content (
+    c_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    g_id INTEGER NOT NULL,
+    c_type TEXT NOT NULL,
+    info TEXT NOT NULL,
+    order INTEGER NOT NULL,
+
+    FOREIGN KEY (g_id) REFERENCES Guides(g_id)
+);
+
+CREATE TABLE Favourites (
+    f_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    u_id INTEGER NOT NULL,
+    g_id INTEGER NOT NULL,
+
+    FOREIGN KEY (u_id) REFERENCES Users(u_id),
+    FOREIGN KEY (g_id) REFERENCES Guides(g_id)
+);
+
