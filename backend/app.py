@@ -133,9 +133,7 @@ def Guides():
     # aneds the guides to the frontend
     return jsonify({"res":200, "guides":guides})
 
-    
 
-    
 
 if __name__ == "__main__":
     app.run()
