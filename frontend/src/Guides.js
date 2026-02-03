@@ -1,7 +1,10 @@
 import './App.css';
+import { useState, useEffect } from 'react';
+// 02/02/2026
+// Created Guides.js
 
+function Guides() {
 
-function Home() {
   return (
     <div className="w-full">
         <div className=''>
@@ -11,4 +14,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Guides;

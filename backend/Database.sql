@@ -17,7 +17,7 @@ CREATE TABLE Content (
     g_id INTEGER NOT NULL,
     c_type TEXT NOT NULL,
     info TEXT NOT NULL,
-    order INTEGER NOT NULL,
+    num INTEGER NOT NULL,
 
     FOREIGN KEY (g_id) REFERENCES Guides(g_id)
 );
@@ -31,3 +31,5 @@ CREATE TABLE Favourites (
     FOREIGN KEY (g_id) REFERENCES Guides(g_id)
 );
 
+
+INSERT INTO Guides (g_name, overview, img) VALUES ('Materials', 'Learn about how to find the different materials and their uses', 'Materials.png');
