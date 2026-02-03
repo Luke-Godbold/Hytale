@@ -113,7 +113,7 @@ function SignUp() {
     
     <div className="w-full">
         
-        <div className={card}>
+        <div className={card + " mt-40"}>
             <h1 className={title}>Sign Up</h1>
             {/* Emails input box */}
             <div className={inputDiv}>

@@ -33,3 +33,4 @@ CREATE TABLE Favourites (
 
 
 INSERT INTO Guides (g_name, overview, img) VALUES ('Materials', 'Learn about how to find the different materials and their uses', 'Materials.png');
+INSERT INTO Guides (g_name, overview, img) VALUES ('Structures', 'Learn about how to find the different structures and their uses', 'Structures.png');

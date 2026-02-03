@@ -40,7 +40,7 @@ function Nav() {
         <div className={deskNav}>
             <Link className={navItems} to='/'><img src='/Hytale_logo.png' className='w-10 ' alt='icon' loading='lazy'></img></Link>
             <Link className={navItems} to='/'>Home</Link>
-            <Link className={navItems} to='/'>Guides</Link>
+            <Link className={navItems} to='/Guides'>Guides</Link>
             <Link className={navItems} to='/'>Favourites</Link>
             <Link className={navItems + " ml-auto"} to='/SignIn'>Sign In</Link>
         </div>
