@@ -6,6 +6,7 @@ import Error404 from './404';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 import { ToastContainer, Bounce } from 'react-toastify';
+import GuidesPage from './Guides';
 
 // 19/01/2026 - 20/01/2026
 // Created app.js
@@ -36,6 +37,7 @@ function App() {
         <Route path = '/Home' element={<Home />}></Route>
         <Route path = '/SignIn' element={<SignIn />}></Route>
         <Route path = '/SignUp' element={<SignUp />}></Route>
+        <Route path = '/Guides' element={<GuidesPage />}></Route>
         <Route path = '/*' element={<Error404 />}></Route>
       </Routes>
 

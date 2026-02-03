@@ -117,7 +117,7 @@ def SignIn():
         conn.close()
         return jsonify({"res":400, "message":"Your email or password is incorrect"})
 
-@app.route("/API/GetGuides", methods=["POST"])
+@app.route("/API/GetGuides")
 def Guides(): 
     # connects to the database
     conn = sqlite3.connect("Database.db")
@@ -130,7 +130,7 @@ def Guides():
     # closes the connection to the database
     conn.close()
 
-    # aneds the guides to the frontend
+    # sends the guides to the frontend
     return jsonify({"res":200, "guides":guides})
 
 

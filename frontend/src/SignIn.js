@@ -93,7 +93,7 @@ function SignIn() {
     
     <div className="w-full">
         
-        <div className={card}>
+        <div className={card + " mt-40"}>
             <h1 className={title}>Sign In</h1>
             {/* Emails input box */}
             <div className={inputDiv}>
