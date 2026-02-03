@@ -133,7 +133,23 @@ def Guides():
     # sends the guides to the frontend
     return jsonify({"res":200, "guides":guides})
 
+@app.route("/API/GetGuideContent", methods=["POST"])
+def GuideContent():
+    data = request.get_json()
+    g_id = data.get("g_id")
+    # connects to the database
+    conn = sqlite3.connect("Database.db")
+    cur = conn.cursor()
 
+    # gets the guide content from the database sorted by the num column
+    cur.execute("SELECT * FROM Content WHERE g_id = ? ORDER BY num", (g_id,))    
+    content = cur.fetchall()
+    print(content)
+    # closes the connection to the database
+    conn.close()
+            
+    # sends the guides to the frontend
+    return jsonify({"res":200, "content":content})
 
 if __name__ == "__main__":
     app.run()
