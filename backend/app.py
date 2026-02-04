@@ -175,5 +175,34 @@ def GuideContent():
     # sends the guides to the frontend
     return jsonify({"res":200, "content":content})
 
+@app.route("/API/Favourite", methods=["POST"])
+def Favourite():
+    data = request.get_json()
+    g_id = data.get("g_id")
+
+    try:
+        if session["U_id"]:
+            u_id = session["U_id"]
+    except KeyError:
+        print ("not signed in")
+        return jsonify({"res":401, "message":"You must be signed in to favourite a guide"})
+
+    # connects to the database
+    conn = sqlite3.connect("Database.db")
+    cur = conn.cursor()
+
+    # checks if the guide is already favourited
+    cur.execute("SELECT * FROM Favourites WHERE g_id = ? AND u_id = ?", (g_id, u_id))
+    if cur.fetchone():
+        print("already signed in")
+        conn.close()
+        return jsonify({"res":400, "message":"You have already favourited this guide"})
+
+    # adds the guide to the favourites
+    cur.execute("INSERT INTO Favourites (g_id, u_id) VALUES (?, ?)", (g_id, u_id))
+    conn.commit()
+    conn.close()
+    return jsonify({"res":200, "message":"Guide favourited successfully"})
+
 if __name__ == "__main__":
     app.run()
