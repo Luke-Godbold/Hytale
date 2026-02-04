@@ -3,6 +3,13 @@ import { useState, useEffect } from 'react';
 import { guideCard, text, title, contentCard } from './Styles';
 // 02/02/2026
 // Created Guides.js
+// 03/02/2026
+// I made a fetch request to ge the guides from the backend
+// I set up a use effect so that guides are fetched when the page is loaded
+// I set up a loop to display all the guides in the database
+// I set up a fetch for the content for a guide when its clicked on
+// I set up an if ternary operation so that if a guide is clicked on it shows the content
+// I set up a loop to show all the content
 
 function GuidesPage() {
   const [guides, setGuides] = useState([])
