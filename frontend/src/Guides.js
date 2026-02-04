@@ -1,6 +1,6 @@
 import './App.css';
 import { useState, useEffect } from 'react';
-import { guideCard, text, title, contentCard } from './Styles';
+import { guideCard, text, title, contentCard, button2, subTitle } from './Styles';
 // 02/02/2026
 // Created Guides.js
 // 03/02/2026
@@ -10,17 +10,22 @@ import { guideCard, text, title, contentCard } from './Styles';
 // I set up a fetch for the content for a guide when its clicked on
 // I set up an if ternary operation so that if a guide is clicked on it shows the content
 // I set up a loop to show all the content
+// 04/02/2026
+// Added a back to guides button to return to the main guides page
+
 
 function GuidesPage() {
   const [guides, setGuides] = useState([])
   const [content, setContent] = useState([])
   const [guideId, setGuideId] = useState(null)
 
+  // sends a get request to the backend to retrieve the different guides from the database
   async function fetchGuides() {
     const res = await fetch("http://localhost:5000/API/GetGuides");
     const data = await res.json();
     setGuides(data.guides);
   }
+  // gets the content of a guide that the user has clicked on
   async function fetchContent(g_id) {
     setGuideId(g_id)
     const res = await fetch("http://localhost:5000/API/GetGuideContent", {
@@ -32,14 +37,18 @@ function GuidesPage() {
     setContent(data.content);
   }
 
+  // runs the fetch guides function when the page is loaded
   useEffect(() => {
     fetchGuides()
   }, [])
 
   return (
     <>
+    {/* If there is no content to show it will show all the guides */}
       {content.length === 0 ?
+      // div makes the items inside use a 2 column grid on bigger screens and 1 column on smaller screens
         <div className="w-9/10 mt-40 grid flex lg:grid-cols-2 md:grid-cols-2 grid-cols-1 justify-center gap-5 items-center justify-self-center">
+          {/* loops through each guide and displays its title, description and image */}
           {guides.map((guide) => (
             <div key={guide[0]} className={guideCard} id={guide[0]} onClick={() => fetchContent(guide[0])}>
               <p className='text-5xl'>{guide[1]}</p>
@@ -49,16 +58,20 @@ function GuidesPage() {
           ))}
     </div>:
         <div className={contentCard + " mt-40"}>
-          <h1 className={title}>{guides[guideId][1]}</h1>
+          <h1 className={title}>{guides[guideId-1][1]}</h1>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6"><path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+
           {content.map((item) => (
             <div className='flex flex-col flex-col-2 items-center gap-5'>
+              {/* Checks the type of content so is shown correctly */}
               {item[2] === "image" ? 
-              <img src={`/Guides/${item[3]}`} alt="icon" loading="lazy"></img>:
+                <img src={`/Guides/${item[3]}`} alt="icon" loading="lazy"></img>:
               item[2] === "subTitle" ?
-              <h2 className={title}>{item[3]}</h2>:
-              <p className={text}>{item[3]}</p>}
+                  <h2 className={subTitle}>{item[3]}</h2>:
+                  <p className={text}>{item[3]}</p>}
             </div>
           ))}
+          <button className={button2 + ' fixed z-50 bottom-5 left-5'} onClick={() => {setContent([]);}}>Back to Guides</button>
         </div>}
     </>
   );

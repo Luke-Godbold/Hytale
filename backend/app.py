@@ -9,6 +9,10 @@ import sqlite3
 # 28/01/2026
 # made the sign up backend
 # made the sign in backend
+# 02/02/2026
+# made the get guides backend
+# 03/02/2026
+# Made a request to get all the content for a guide from the database
 
 load_dotenv("SECRET.env")
 secret_key = os.getenv("SECRET_KEY")
@@ -109,13 +113,33 @@ def SignIn():
 
 
     if correct:
-        session["U-id"] = details[0]
+        session["U_id"] = details[0]
         conn.close()
         return jsonify({"res":200, "message":"Successfully signed in"})
     
     else:
         conn.close()
         return jsonify({"res":400, "message":"Your email or password is incorrect"})
+
+# Signs the user out
+@app.route("/API/SignOut", methods=["GET"])
+def SignOut():
+    # clears the user session
+    try:
+        if session["U_id"]:
+            session.clear()
+            return jsonify({"res":200, "message":"Successfully signed out"})
+    except KeyError:
+        return jsonify({"res":401, "message":"You aren't signed in"})
+
+# checks if the user is signed in
+@app.route("/API/SignedInCheck", methods=["GET"])
+def SignedInCheck():
+    try:
+        if session["U_id"]:
+            return jsonify({"res":200, "message":"User is signed in"})
+    except KeyError:
+        return jsonify({"res":401, "message":"User is not signed in"})
 
 @app.route("/API/GetGuides")
 def Guides(): 

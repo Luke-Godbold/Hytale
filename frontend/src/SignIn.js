@@ -1,4 +1,4 @@
-import { Link, Route, Routes } from 'react-router-dom';
+import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import './App.css';
 import Nav from './NavBar';
@@ -22,6 +22,7 @@ function SignIn() {
 
   const [view, setView] = useState(false);
   const [type, setType] = useState("password");
+  const navigate = useNavigate();
 
     async function SignInRequest() {
     let email = document.getElementById("Email").value
@@ -57,7 +58,8 @@ function SignIn() {
           theme: "dark",
           transition: Bounce,
 
-          });}
+          });
+        navigate("/");}
       else{
         toast.error(data["message"], {
           position: "top-center",
