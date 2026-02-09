@@ -20,6 +20,7 @@ function GuidesPage() {
   const [content, setContent] = useState([])
   const [guideId, setGuideId] = useState(null)
   const [status, setStatus] = useState("")
+  const [updated, setUpdated] = useState(false)
 
   // sends a get request to the backend to retrieve the different guides from the database
   async function fetchGuides() {
@@ -62,6 +63,7 @@ function GuidesPage() {
 
           })
     }
+    setUpdated(!updated)
   }
 
   async function CheckFavourited () {
@@ -75,10 +77,39 @@ function GuidesPage() {
     setStatus(data.res)
   }
 
+  async function Unfavourite () {
+    const res = await fetch("http://localhost:5000/API/Unfavourite", {
+      method: "POST",
+      headers: {"Content-Type": "application/json" },
+      body: JSON.stringify({"g_id": guideId }),
+      credentials: "include"
+    });
+    const data = await res.json();
+    if (data.res === 400){
+      toast.error(data["message"], {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+
+          })
+    }
+    setUpdated(!updated)
+  }
+
   // runs the fetch guides function when the page is loaded
   useEffect(() => {
     fetchGuides()
   }, [])
+
+  useEffect(() => {
+    CheckFavourited();
+  }, [content, updated])
 
   return (
     <>
@@ -99,7 +130,9 @@ function GuidesPage() {
           <div className='flex items-center w-full justify-center mb-5 items-center justify-self-center'>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={0} stroke="currentColor" className='size-8 '><path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
             <h1 className={title + ' w-full justify-center underline underline-offset-5'}>{guides[guideId-1][1]}</h1>
-            <svg xmlns="http://www.w3.org/2000/svg" onClick={() => {favourite(guideId)}} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className='size-8 cursor-pointer hover:-translate-y-2 transition ease-in-out duration-200 hover:text-yellow-400 ml-auto flex'><path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>
+            {(status === 200) ?
+            <svg xmlns="http://www.w3.org/2000/svg" onClick={() => {Unfavourite(guideId)}} fill="#f9c600" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#f9c600" className='size-8 cursor-pointer text-yellow-400 ml-auto flex'><path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>:
+            <svg xmlns="http://www.w3.org/2000/svg" onClick={() => {favourite(guideId)}} fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className='size-8 cursor-pointer hover:text-yellow-400 ml-auto flex'><path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" /></svg>}
           </div>
 
           {content.map((item) => (

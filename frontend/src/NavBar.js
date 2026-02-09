@@ -82,8 +82,13 @@ function Nav() {
             {menuOpen && (
             <div className='flex flex-col'>
                 <Link to='/'>Home</Link>
-                <Link to='/'>Home</Link>
-                <Link to='/'>Home</Link>
+                <Link to='/Guides'>Guides</Link>
+                <Link to='/Favourites'>Favourites</Link>
+                {status === 200 ? (
+                <button className={navItems + " ml-auto"} onClick={() => {SignOut()}}>Sign Out</button>
+            ) : (
+                <Link className={navItems + " ml-auto"} to='/SignIn'>Sign In</Link>
+            )}
             </div>)}
         </div>
     </div>
@@ -95,7 +100,7 @@ function Nav() {
             <Link className={navItems} to='/'><img src='/Hytale_logo.png' className='w-10 ' alt='icon' loading='lazy'></img></Link>
             <Link className={navItems} to='/'>Home</Link>
             <Link className={navItems} to='/Guides'>Guides</Link>
-            <Link className={navItems} to='/'>Favourites</Link>
+            <Link className={navItems} to='/Favourites'>Favourites</Link>
             {status === 200 ? (
                 <button className={navItems + " ml-auto"} onClick={() => {SignOut()}}>Sign Out</button>
             ) : (

@@ -224,6 +224,27 @@ def FavouriteCheck():
         conn.close()
         return jsonify({"res":404, "message":"Guide is not favourited"})
 
+@app.route("/API/Unfavourite", methods=["POST"])
+def Unfavourite():
+    data = request.get_json()
+    g_id = data.get("g_id")
+
+    try:
+        if session["U_id"]:
+            u_id = session["U_id"]
+    except KeyError:
+        return jsonify({"res":400, "message":"You must be signed in to unfavourite a guide"})
+
+    # connects to the database
+    conn = sqlite3.connect("Database.db")
+    cur = conn.cursor()
+
+    # removes the guide from the favourites
+    cur.execute("DELETE FROM Favourites WHERE u_id = ? AND g_id = ?", (u_id, g_id))
+    conn.commit()
+    conn.close()
+    return jsonify({"res":200, "message":"Guide unfavourited successfully"})
+
 @app.route("/API/GetFavourites", methods=["GET"])
 def GetFavourites():  
     try:
@@ -240,11 +261,22 @@ def GetFavourites():
     cur.execute("SELECT g_id FROM Favourites WHERE u_id = ?", (u_id,))
     favourites = cur.fetchall()
     print(favourites)
+
+    favourites_list = []
+
+    for i in favourites:
+        # gets the guide content from the database
+        cur.execute("SELECT * FROM Guides WHERE G_id = ?", (i[0],))
+        guide = cur.fetchone()
+        if guide:
+            # adds the guide to the favourites list
+            favourites_list.append(guide)
+
     # closes the connection to the database
     conn.close()
 
     # sends the favourited guides to the frontend
-    return jsonify({"res":200, "favourites":favourites})
+    return jsonify({"res":200, "favourites":favourites_list})
 
 if __name__ == "__main__":
     app.run()
