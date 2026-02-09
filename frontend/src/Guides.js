@@ -1,6 +1,7 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import { guideCard, text, title, contentCard, button2, subTitle, linkText, navItems } from './Styles';
+import { toast, Bounce  } from 'react-toastify';
 // 02/02/2026
 // Created Guides.js
 // 03/02/2026
@@ -18,6 +19,7 @@ function GuidesPage() {
   const [guides, setGuides] = useState([])
   const [content, setContent] = useState([])
   const [guideId, setGuideId] = useState(null)
+  const [status, setStatus] = useState("")
 
   // sends a get request to the backend to retrieve the different guides from the database
   async function fetchGuides() {
@@ -37,15 +39,41 @@ function GuidesPage() {
     setContent(data.content);
   }
 
+  // Favourites the clicked on guide and sends a post request to the backend with the guide id, it also checks if the user is signed in and if they have already favourited the guide and shows a toast message accordingly
   async function favourite (g_id) {
     const res = await fetch("http://localhost:5000/API/Favourite", {
       method: "POST",
       headers: {"Content-Type": "application/json" },
-      body: JSON.stringify({"g_id": g_id })
+      body: JSON.stringify({"g_id": g_id }),
+      credentials: "include"
     });
     const data = await res.json();
+    if (data.res === 400){
+      toast.error(data["message"], {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+
+          })
+    }
   }
-    
+
+  async function CheckFavourited () {
+    const res = await fetch("http://localhost:5000/API/FavouriteCheck", {
+      method: "POST",
+      headers: {"Content-Type": "application/json" },
+      body: JSON.stringify({"g_id": guideId }),
+      credentials: "include"
+    });
+    const data = await res.json();
+    setStatus(data.res)
+  }
 
   // runs the fetch guides function when the page is loaded
   useEffect(() => {

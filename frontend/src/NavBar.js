@@ -1,4 +1,4 @@
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import { useEffect, useState } from 'react';
 import { navItems, mobileNav, deskNav } from './Styles';
@@ -12,6 +12,7 @@ function Nav() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [status , setStatus] = useState("");
     const Navigate = useNavigate();
+    const location = useLocation();
 
     async function CheckSignedIn () {
         const res = await fetch("http://localhost:5000/API/SignedInCheck", {
@@ -61,7 +62,7 @@ function Nav() {
 
     useEffect(() => {
         CheckSignedIn();
-    }, []);
+    }, [location]);
 
   return (
     <>
