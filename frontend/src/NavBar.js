@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { navItems, mobileNav, deskNav } from './Styles';
+import { toast, Bounce  } from 'react-toastify';
 
 // 19/01/2026 - 20/01/2026
 // Made a variable to track if the hamburger menu is open
@@ -9,6 +10,59 @@ import { navItems, mobileNav, deskNav } from './Styles';
 // Made a button to show and hide the full menu on mobile
 function Nav() {
     const [menuOpen, setMenuOpen] = useState(false);
+    const [status , setStatus] = useState("");
+    const Navigate = useNavigate();
+    const location = useLocation();
+
+    async function CheckSignedIn () {
+        const res = await fetch("http://localhost:5000/API/SignedInCheck", {
+            method: "GET",
+            credentials: "include"
+        });
+        const data = await res.json();
+        setStatus(data.res);
+    }
+
+    async function SignOut () {
+        const res = await fetch("http://localhost:5000/API/SignOut", {
+            method: "GET",
+            credentials: "include"
+        });
+        const data = await res.json();
+        if (data.res === 200){
+        toast.success(data["message"], {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+          });
+            Navigate("/signin");
+        }
+        else{
+        toast.error(data["message"], {
+          position: "top-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+
+          });
+      }
+      CheckSignedIn(); 
+    }
+
+    useEffect(() => {
+        CheckSignedIn();
+    }, [location]);
 
   return (
     <>
@@ -42,7 +96,11 @@ function Nav() {
             <Link className={navItems} to='/'>Home</Link>
             <Link className={navItems} to='/Guides'>Guides</Link>
             <Link className={navItems} to='/'>Favourites</Link>
-            <Link className={navItems + " ml-auto"} to='/SignIn'>Sign In</Link>
+            {status === 200 ? (
+                <button className={navItems + " ml-auto"} onClick={() => {SignOut()}}>Sign Out</button>
+            ) : (
+                <Link className={navItems + " ml-auto"} to='/SignIn'>Sign In</Link>
+            )}
         </div>
     </div>
 

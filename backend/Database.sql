@@ -51,4 +51,12 @@ INSERT INTO Content (g_id, c_type, info, num) VALUES (1, 'text', 'You can find t
 INSERT INTO Content (g_id, c_type, info, num) VALUES (1, 'text', 'Thorium is one of the materials used in the mid game crafting recipes a lot. It is a step up from iron in terms of quality and durability.', 14);
 INSERT INTO Content (g_id, c_type, info, num) VALUES (1, 'image', 'Thorium.png', 15);
 
+INSERT INTO Content (g_id, c_type, info, num) VALUES (2, 'subTitle', 'Dungeons', 1);
+INSERT INTO Content (g_id, c_type, info, num) VALUES (2, 'text', 'Dungeons are dangerous underground structures filled with enemies and traps. They often contain rare loot and unique challenges.', 2);
+INSERT INTO Content (g_id, c_type, info, num) VALUES (2, 'text', 'Exploring dungeons is risky but rewarding, especially for players seeking powerful items.', 3);
+INSERT INTO Content (g_id, c_type, info, num) VALUES (2, 'image', 'Dungeon.png', 4);
 
+INSERT INTO Content (g_id, c_type, info, num) VALUES (2, 'subTitle', 'Ruins', 5);
+INSERT INTO Content (g_id, c_type, info, num) VALUES (2, 'text', 'Ruins are remnants of ancient civilizations scattered across the world. They contain hidden treasures.', 6);
+INSERT INTO Content (g_id, c_type, info, num) VALUES (2, 'text', 'Be cautious when exploring ruins, as they can be home to hostile creatures.', 7);
+INSERT INTO Content (g_id, c_type, info, num) VALUES (2, 'image', 'Ruins.png', 8);

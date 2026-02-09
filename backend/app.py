@@ -9,6 +9,10 @@ import sqlite3
 # 28/01/2026
 # made the sign up backend
 # made the sign in backend
+# 02/02/2026
+# made the get guides backend
+# 03/02/2026
+# Made a request to get all the content for a guide from the database
 
 load_dotenv("SECRET.env")
 secret_key = os.getenv("SECRET_KEY")
@@ -109,13 +113,33 @@ def SignIn():
 
 
     if correct:
-        session["U-id"] = details[0]
+        session["U_id"] = details[0]
         conn.close()
         return jsonify({"res":200, "message":"Successfully signed in"})
     
     else:
         conn.close()
         return jsonify({"res":400, "message":"Your email or password is incorrect"})
+
+# Signs the user out
+@app.route("/API/SignOut", methods=["GET"])
+def SignOut():
+    # clears the user session
+    try:
+        if session["U_id"]:
+            session.clear()
+            return jsonify({"res":200, "message":"Successfully signed out"})
+    except KeyError:
+        return jsonify({"res":401, "message":"You aren't signed in"})
+
+# checks if the user is signed in
+@app.route("/API/SignedInCheck", methods=["GET"])
+def SignedInCheck():
+    try:
+        if session["U_id"]:
+            return jsonify({"res":200, "message":"User is signed in"})
+    except KeyError:
+        return jsonify({"res":401, "message":"User is not signed in"})
 
 @app.route("/API/GetGuides")
 def Guides(): 
@@ -150,6 +174,77 @@ def GuideContent():
             
     # sends the guides to the frontend
     return jsonify({"res":200, "content":content})
+
+@app.route("/API/Favourite", methods=["POST"])
+def Favourite():
+    data = request.get_json()
+    g_id = data.get("g_id")
+
+    try:
+        if session["U_id"]:
+            u_id = session["U_id"]
+    except KeyError:
+        return jsonify({"res":400, "message":"You must be signed in to favourite a guide"})
+
+    # connects to the database
+    conn = sqlite3.connect("Database.db")
+    cur = conn.cursor()
+
+    # checks if the guide is already favourited
+    cur.execute("SELECT * FROM Favourites WHERE g_id = ? AND u_id = ?", (g_id, u_id))
+    if cur.fetchone():
+        conn.close()
+        return jsonify({"res":400, "message":"You have already favourited this guide"})
+
+    # adds the guide to the favourites
+    cur.execute("INSERT INTO Favourites (u_id, g_id) VALUES (?, ?)", (u_id, g_id))
+    conn.commit()
+    conn.close()
+    return jsonify({"res":200, "message":"Guide favourited successfully"})
+
+@app.route("/API/FavouriteCheck", methods=["POST"])
+def FavouriteCheck():
+    data = request.get_json()
+    g_id = data.get("g_id")
+    try:
+        if session["U_id"]:
+            u_id = session["U_id"]
+    except KeyError:
+        return jsonify({"res":400, "message":"You must be signed in to check favourites"})
+    # connects to the database
+    conn = sqlite3.connect("Database.db")
+    cur = conn.cursor()
+
+    # checks if the guide is favourited
+    cur.execute("SELECT * FROM Favourites WHERE g_id = ? AND u_id = ?", (g_id, u_id))
+    if cur.fetchone():
+        conn.close()
+        return jsonify({"res":200, "message":"Guide is favourited"})
+    else:
+        conn.close()
+        return jsonify({"res":404, "message":"Guide is not favourited"})
+
+@app.route("/API/GetFavourites", methods=["GET"])
+def GetFavourites():  
+    try:
+        if session["U_id"]:
+            u_id = session["U_id"]
+    except KeyError:
+        return jsonify({"res":400, "message":"You must be signed in to view your favourites"})
+
+    # connects to the database
+    conn = sqlite3.connect("Database.db")
+    cur = conn.cursor()
+
+    # gets the favourited guides from the database
+    cur.execute("SELECT g_id FROM Favourites WHERE u_id = ?", (u_id,))
+    favourites = cur.fetchall()
+    print(favourites)
+    # closes the connection to the database
+    conn.close()
+
+    # sends the favourited guides to the frontend
+    return jsonify({"res":200, "favourites":favourites})
 
 if __name__ == "__main__":
     app.run()
