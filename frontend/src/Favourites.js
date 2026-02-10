@@ -2,9 +2,39 @@ import './App.css';
 import { useState, useEffect, use } from 'react';
 import { guideCard, text, title } from './Styles';
 import { toast, Bounce  } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 function Favourites() {
     const [favourites, setFavourites] = useState([])
+    const [status, setStatus] = useState("")
+    const Navigate = useNavigate();
+
+    async function LoginCheck() {
+        const res = await fetch("http://localhost:5000/API/SignedInCheck", {
+            method: "GET",
+            credentials: "include"
+        });
+        const data = await res.json();
+        setStatus(data.res);
+        if (data.res === 401) {
+            toast.error(data["message"], {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+
+            })
+        Navigate("/signin");
+      }
+      else{
+        fetchFavourites();
+      }
+    }
 
     async function fetchFavourites() {
         const res = await fetch("http://localhost:5000/API/GetFavourites", {
@@ -41,11 +71,12 @@ function Favourites() {
   }
 
     useEffect(() => {
-        fetchFavourites();
+        LoginCheck();
     }, []);
 
   return (
     <div className="w-full">
+      {favourites.length === 0 ? <h1 className={title + ' pt-40 text-white'}>You have no favourited guides</h1> : <>
         <div className='w-9/10 mt-40 grid flex lg:grid-cols-2 md:grid-cols-2 grid-cols-1 justify-center gap-5 items-center justify-self-center'>
             {favourites.map((item) => (
                 <div className={guideCard}>
@@ -57,7 +88,7 @@ function Favourites() {
                   <img src={`/Guides/${item[3]}`} alt="icon" loading="lazy" className='w-full h-auto mt-2 rounded' />
                 </div>
             ))}
-        </div>
+        </div></>}
     </div>
   );
 }

@@ -101,8 +101,9 @@ function Nav() {
             <Link className={navItems} to='/'>Home</Link>
             <Link className={navItems} to='/Guides'>Guides</Link>
             <Link className={navItems} to='/Favourites'>Favourites</Link>
-            {status === 200 ? (
-                <button className={navItems + " ml-auto"} onClick={() => {SignOut()}}>Sign Out</button>
+            {status === 200 ? (<div className='flex flex-row gap-5 ml-auto'>
+                <Link className={navItems} to='/Account'>Account</Link>
+                <button className={navItems} onClick={() => {SignOut()}}>Sign Out</button></div>
             ) : (
                 <Link className={navItems + " ml-auto"} to='/SignIn'>Sign In</Link>
             )}

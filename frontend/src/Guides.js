@@ -1,6 +1,6 @@
 import './App.css';
 import { useState, useEffect } from 'react';
-import { guideCard, text, title, contentCard, button2, subTitle, linkText, navItems } from './Styles';
+import { guideCard, text, title, contentCard, button2, subTitle, linkText, navItems, button3 } from './Styles';
 import { toast, Bounce  } from 'react-toastify';
 // 02/02/2026
 // Created Guides.js
@@ -154,10 +154,12 @@ function GuidesPage() {
             </div>
           ))}
           <button className={button2 + ' fixed z-50 bottom-5 left-5'} onClick={() => {setContent([]);}}>Back to Guides</button>
-          <button className={'fixed z-50 bottom-5 right-5 cursor-pointer'} onClick={() => {scroolToTop()}}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+          <button className={button3 + ' fixed z-50 bottom-5 right-5 '} onClick={() => {scroolToTop()}}>
+            <p className='hidden lg:flex md:flex'>Scroll to the top</p>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
             </svg>
-            <p className='hidden hover:flex'></p>
+            
           </button>
         </div>}
     </>
